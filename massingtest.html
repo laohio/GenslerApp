@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Massing Tool Test 3</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        body { margin:0; padding:0; }
+        #map {
+			position:absolute;
+			right: 0;
+			top: 0;
+			height: 100%;
+			width: 100%;
+			}
+    </style>
+</head>
+<body>
+	<style>
+		.map-overlay {
+			font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+			position: absolute;
+			width: 25%;
+			top: 0;
+			left: 0;
+			padding: 10px;
+		}
+
+		.map-overlay .map-overlay-inner {
+			background-color: #fff;
+			box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+			border-radius: 4px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+
+		.map-overlay h2 {
+			line-height: 24px;
+			display: block;
+			margin: 0 0 10px;
+		}
+		
+		.map-overlay label {
+			display: block;
+			margin: 0 0 10px;
+		}
+
+		.map-overlay input {
+			background-color: transparent;
+			display: inline-block;
+			width: 100%;
+			position: relative;
+			margin: 0;
+			cursor: ew-resize;
+		}
+		
+		#context {
+			width: 90%;
+			margin: 0 auto;
+			background-color: #ababab;
+			color: #fff;
+			text-align: center;
+			font-weight: bold;
+			padding: 0.5em;
+			border-radius: 0.5em;
+			box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.20);
+			cursor: pointer;
+		}
+		#context:hover {
+			background-color: orange;
+		}
+    </style>
+	
+	<div id='map'></div>
+	
+		<div class='map-overlay top'>
+			<div class='map-overlay-inner'>
+				<h2>Inputs</h2>
+				<p>
+				<label>Main Building: <span id='p1-value'>196 ft</span></label>
+				<input id='p1' type='range' min='0' max='500' step='10' value='60' />
+				<label>Secondary Building: <span id='p2-value'>300 ft</span></label>
+				<input id='p2' type='range' min='0' max='500' step='10' value='100' />
+				</p>
+				<p>Context visibility:</p>
+				<div id="context" class="on">Hide Context</div>
+			</div>
+		</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0eWFiYXN1IiwiYSI6ImNpdDV2a3A3NzAxZXgyem8zdWt0M2V5aXYifQ.wubd_w4upW5bNTMRmUX95w';
+var map = new mapboxgl.Map({
+    style: 'mapbox://styles/satyabasu/ciwflrzlh004g2qofgqfixehh',
+    center: [ -87.625, 41.875 ],
+    zoom: 15,
+    pitch: 60,
+    bearing: -55,
+	container: 'map'
+});
+
+map.addControl(new mapboxgl.GeolocateControl({position: 'top-right'}));
+map.addControl(new mapboxgl.NavigationControl({position: 'top-left'}));
+
+var contextSwitcher = document.getElementById('context');
+contextSwitcher.addEventListener("click", function(){
+    contextSwitcher = document.getElementById('context');
+    if (contextSwitcher.className === 'on') {
+        contextSwitcher.setAttribute('class', 'off');
+        map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', 0);
+        contextSwitcher.innerHTML = 'Show Context';
+    } else {
+        contextSwitcher.setAttribute('class', 'on');
+        map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', 0.9);
+        contextSwitcher.innerHTML = 'Hide Context';
+    }
+});
+
+function heightmodifier(p1Height, p2Height) {
+    var p1Height = document.getElementById('p1').value;
+    var p2Height = document.getElementById('p2').value;
+    map.setPaintProperty('Massing', 'fill-extrusion-height', {'property': 'footprint', 'type': 'categorical', 'stops': [["main", parseFloat(p1Height)], ["secondary", parseInt(p2Height, 10)]] });
+    document.getElementById('p1-value').innerHTML = parseInt(p1Height*3.28084, 10)+" ft";
+    document.getElementById('p2-value').innerHTML = parseInt(p2Height*3.28084, 10)+" ft";
+}
+	
+/*
+var p1 = document.getElementById('p1');
+var p1Value = document.getElementById('p1-value');
+var p2 = document.getElementById('p2');
+var p2Value = document.getElementById('p2-value');
+*/
+
+// the 'building' layer in the mapbox-streets vector source contains building-height data from OpenStreetMap.
+
+map.on('load', function() {
+	
+	/* Add 3D buildings */
+	map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+            'fill-extrusion-color': '#eee',
+            'fill-extrusion-height': {
+                'type': 'identity',
+                'property': 'height'
+            },
+            'fill-extrusion-base': {
+                'type': 'identity',
+                'property': 'min_height'
+            },
+            'fill-extrusion-opacity': 0.9
+        }
+    }, 'admin');
+
+var mainHeight = ["main", parseInt(document.getElementById('p1').value, 10)];
+var secondaryHeight = ["secondary", parseInt(document.getElementById('p2').value, 10)];
+	
+	/* Add Massing Form */
+  	map.addLayer({
+        'id': 'Massing',
+        'source': 'composite',
+        'source-layer': 'Test',
+//		'filter': ['==', 'footprint', 'main'],
+        'type': 'fill-extrusion',
+        'minzoom': 12,
+        'paint': {
+            'fill-extrusion-color': {
+				'property': 'footprint',
+				'type': 'categorical',
+				'stops': [
+				// color by footprint
+				["main", '#afe'],
+				["secondary", '#fd0']
+				]
+			},
+            'fill-extrusion-height': {
+				'property': 'footprint',
+				'type': 'categorical',
+				'stops': [
+				// building base will be set by footprint to match slider default values
+				mainHeight,
+				secondaryHeight
+				]
+            },
+			'fill-extrusion-base': {
+				'stops': [
+				// building base will be 0
+				[0,0]
+				]
+            },
+            'fill-extrusion-opacity': 0.9
+        }
+    }, 'admin');
+	
+/*	
+    p1.addEventListener('input', function(p1) {
+        // Adjust the p1 value attribute
+        map.setFilter('Massing', ['==', 'footprint', 'main']);
+		map.setPaintProperty('Massing', 'fill-extrusion-height', parseInt(p1.target.value, 10));
+		// Value indicator
+        p1Value.textContent = parseInt(p1.target.value*3.28084, 10) + '-ft';
+    });
+	
+	p2.addEventListener('input', function(p2) {
+        // Adjust the p2 value attribute
+		map.setFilter('Massing', ['==', 'footprint', 'secondary']);
+		map.setPaintProperty('Massing', 'fill-extrusion-height', parseInt(p2.target.value, 10));
+		// Value indicator
+        p2Value.textContent = parseInt(p2.target.value*3.28084, 10) + '-ft';
+    });
+*/ 
+var p1 = document.getElementById('p1'),
+    p2 = document.getElementById('p2');
+	
+/*
+p1.oninput = function() {
+    heightmodifier(p1.value, p2.value);
+}
+p2.oninput = function() {
+    heightmodifier(p1.value, p2.value);
+}	
+*/
+
+p1.addEventListener('input', function() {
+	heightmodifier(p1.value,p2.value);
+});
+p2.addEventListener('input', function() {
+	heightmodifier(p1.value,p2.value);
+});
+
+	/* Light settings */
+    map.setLight({
+        'anchor': 'map',
+        'color': '#ffffff',
+        'intensity': 0.7,
+//		'position': [ 1.15, 80, 75 ]
+    });
+});
+
+</script>
+
+</body>
+</html>

@@ -6,5 +6,4 @@ function() {
 	    center: [-74.50, 40], // starting position [lng, lat]
 	    zoom: 9 // starting zoom
 	});
-	console.log('hello');
 }

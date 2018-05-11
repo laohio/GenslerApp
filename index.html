@@ -17,6 +17,9 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Goudy+Bookletter+1911" rel="stylesheet">
 
+    <!-- Navigation menu font -->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+
 
     <!-- Angular app initialized here -->
     <script src="app.js"></script>
@@ -50,7 +53,7 @@
             <input type="number" ng-model="total_sf" placeholder="Enter total SF for building">
             <input ng-click="updateFloors()" type="submit" value="Submit" name="clickevent">
             <ul>
-                <li ng-repeat="x in floorsArray" class="floorsList"><input type="checkbox">{{x}}</li>
+                <li ng-repeat="x in floorsArray" class="floorsList"><input type="checkbox" ng-checked="">{{x}}</li>
             </ul>
         </form>
     </div>
@@ -62,7 +65,7 @@
 
 
     <!-- For toggling map layers -->
-    <div id='menu'></div> 
+    <div id='layersMenu'></div> 
 </body>
 </html>
 

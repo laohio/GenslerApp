@@ -2,13 +2,9 @@ angular
 	.module('gensApp')
 	.factory('inputData',inputData);
 
-function inputData() {
-	return {
-		setInfo: setInfo,
-		getFloors: getFloors,
-		getSqft: getSqft,
-		makeLayers: makeLayers
-	}
+inputData.$inject = ['$rootScope'];	
+
+function inputData($rootScope) {
 	var num_floors = '';
 	var sqft = '';
 	var building_height = '';
@@ -24,6 +20,19 @@ function inputData() {
 	}
 	function getSqft() {
 		return sqft;
+	}
+
+	// Emit to the rootscope that a button has been clicked
+	notify = function() {
+		$rootScope.$emit("buttonClicked");
+	}
+
+	// Listen for button click being emmitted to the rootscope.  Fire the callback function once it is.
+	subscribe = function (scope, callback) {
+		console.log('subscribe was called');
+		var handler = $rootScope.$on("buttonClicked", callback);
+		// Avoid memory leaks
+		scope.$on("destroy",handler);
 	}
 
 
@@ -54,5 +63,14 @@ function inputData() {
 		    	building.push(new_floor);
 		  	}
 		  	return building;
+	}
+
+	return {
+		setInfo: setInfo,
+		getFloors: getFloors,
+		getSqft: getSqft,
+		notify: notify,
+		subscribe: subscribe,
+		makeLayers: makeLayers
 	}
 }

@@ -2,39 +2,67 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Display a map</title>
+    <title>Gensler App</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <!-- AngularJS Google CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+
+    <!-- Mapbox JS-->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+    <!-- Mapbox styling-->
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
 
     <!-- For font of building name -->
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Goudy+Bookletter+1911" rel="stylesheet">
 
-    <!-- jQuery Google CDN -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!-- Custom JS file -->
-    <script type="text/javascript" src="app.js"></script>
+    <!-- Angular app initialized here -->
+    <script src="app.js"></script>
+
+    <!-- Map controller -->
+    <script src="mapController.controller.js"></script>
+
+    <!-- Controller for main form -->
+    <script src="formCtrl.controller.js"></script>
+
+    <!-- Factory managing input data -->
+    <script src="inputData.factory.js"></script>
+
+    <!-- Factory storing geoData -->
+    <script src="geoData.factory.js"></script>
 
     <!-- Additional CSS -->
     <link rel="stylesheet" href="stylesheet.css">
+
 </head>
-<body>
+<body ng-app="gensApp">
+    <div id="parent-div" ng-controller="formCtrl"> <!-- Made with the intent of wrapping mapbox div within form div -->
     <div id="navigation">
         <h2>One Beacon</h2>
-        <form id="mainForm">
+        <form id="mainForm" name="mainForm">
+            Building Height: <br>
+            <input type="number" ng-model="building_height" placeholder="Please enter building height (meters)">
             Number of Floors: <br>
-            <input type="number" id="numFloors"> <br>
+            <input type="number" ng-model="num_floors" placeholder="Enter total number of floors"><br>
             Total SF: <br>
-            <input type="number" id="totalSf">
-            <input type="submit" value="Submit">
+            <input type="number" ng-model="total_sf" placeholder="Enter total SF for building">
+            <input ng-click="updateFloors()" type="submit" value="Submit" name="clickevent">
+            <ul>
+                <li ng-repeat="x in floorsArray" class="floorsList"><input type="checkbox">{{x}}</li>
+            </ul>
         </form>
     </div>
-    <div id='map'></div>
-    <script src="map.js"></script>
-    <div id="menu"></div> <!-- For toggling layers -->
 
+    <!-- Mapbox map container -->
+    <div id="map-box-map" ng-controller="mapController"></div>
+    </div>
+
+
+
+    <!-- For toggling map layers -->
+    <div id='menu'></div> 
 </body>
 </html>
 

@@ -4,13 +4,12 @@ body {
 }
 
 
-#map { 
+#map-box-map { 
 	position: absolute;
 	width: 100%;
 	top: 0;
 	bottom: 0;
 	z-index: 1;
-
 }
 
 #menu {
@@ -57,7 +56,7 @@ body {
 
 #navigation {
 	position: absolute;
-	height: 400px;
+	height: px;
 	width: 400px;
 	background-color: #D3D3D3;
 	z-index:3;
@@ -68,7 +67,7 @@ body {
 	text-align: center;
 	font-family: 'Raleway', Helvetica, Arial, sans-serif;
 	font-size: 30px;
-
+	color: red;
 }
 
 #navigation form {
@@ -95,3 +94,9 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
 }
+
+li {
+ display: inline-block;
+ padding-right: 20px;
+}
+

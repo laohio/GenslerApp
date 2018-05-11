@@ -3,9 +3,9 @@ angular
     .module("gensApp")
     .controller("mapController",mapController);
 
-mapController.$inject = ["inputData","$http"];
+mapController.$inject = ["$scope", "inputData","geoData", "$http"];
 
-function mapController(inputData,$http) {    
+function mapController($scope,inputData,geoData,$http) { 
     var map = new mapboxgl.Map({
         container: 'map-box-map', // container id
         style: 'mapbox://styles/mapbox/navigation-preview-night-v2', // stylesheet location
@@ -19,7 +19,6 @@ function mapController(inputData,$http) {
     map.on('load', function() {
         // Insert the layer beneath a symbol layer
         var layers = map.getStyle().layers;
-        console.log(layers);
 
         var labelLayerId;
         for (var i = 0; i < layers.length; i++) {
@@ -65,41 +64,51 @@ function mapController(inputData,$http) {
         }
     }, labelLayerId);
 
-    /*
-    function map_layers() {
-        var source_data = function() {
-            $http({
-            method: 'GET',
-            url: 'buildings.js',
-            }).success(function(data){
-                alert('success');
-            }).error(function(){
-                alert("error");
-            });
+    
+    $scope.prepare_layers = function () {
+        //Success handler if GeoJSON data successfully retrieved
+        function successHandler(res) {
+            $scope.source_data = res.data;
+            make_layers();
         }
-        /*
-        var userData = inputData;
-        // Copy layers object, an array, from service for custom building
+        //Failure handler if GeoJSON unsuccessfully retrieved
+        function failureHandler(res) {
+            alert('Error: failure to retrieve data');
+        }
+        //Call geoData factory's function to retrieve data
+        getData = function() {
+            geoData.getData(successHandler, failureHandler);
+        }
+        //Run function to get geodata
+        getData();
+
+        // Copy layers object, an array with "floor" object for each floor, from inputData factory
         // e.g. customLayers[0] == {floor_id:1, base_height: 0; floor_height: 20}
-        var customLayers = userData.makeLayers(); 
-        for (var i = 0; i < userData.num_floors; i++) {
-            map.addLayer({
-            'id': 'Property',
-            'type': 'fill-extrusion',
-            'source': buildings.js, //YOU PROBABLY NEED HTTP GET TO ACCESS THIS
-            'paint': {
-                'fill-extrusion-color': 'blue',
-                'fill-extrusion-height': customLayers[i].floor_height,
-                'fill-extrusion-base': customLayers[i].base_height,
-                'fill-extrusion-opacity': 0.95
+        // After this, make 3d extrusion on the map for each floor
+        
+        function make_layers() {
+            console.log(inputData.numFloors);
+            var customLayers = inputData.makeLayers;
+            for (var i = 0; i < inputData.getFloors; i++) {
+                console.log('entered loop');
+                //console.log('hello');
+                map.addLayer({
+                'id': 'Property',
+                'type': 'fill-extrusion',
+                'source': '$scope.source_data', 
+                'paint': {
+                    'fill-extrusion-color': 'blue',
+                    'fill-extrusion-height': customLayers[i].floor_height,
+                    'fill-extrusion-base': customLayers[i].base_height,
+                    'fill-extrusion-opacity': 0.95
+                }
+            });
             }
-        });
         }
     }
-    map_layers();
-    */
+    // THIS should only be run after the data (number of floors, etc.) is entered by the user, otherwise will not work.  Figure this out
+    //$scope.prepare_layers();
     
-
     // Toggleable layers
     var toggleableLayerIds = ['All-Buildings','Property'];
     for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -128,6 +137,5 @@ function mapController(inputData,$http) {
         var layers = document.getElementById('menu');
         layers.appendChild(link);
     }
-    }); 
+    });
 }
-

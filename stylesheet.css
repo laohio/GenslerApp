@@ -101,10 +101,22 @@ input[type=submit] {
     cursor: pointer;
 }
 
-li {
+#floorsInfo li {
  display: inline-block;
  padding-right: 20px;
  width: 20px;
  text-align: center;
+}
+
+#buildingInfo li {
+    display: inline-block;
+}
+
+button {
+    padding: 10px;
+    background-color: white;
+    text-decoration:none;
+    border-style: solid;
+    border-color: black;
 }
 

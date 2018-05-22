@@ -9,6 +9,7 @@ function inputData($rootScope) {
 	var sqft = '';
 	var building_height = '';
 
+	// Setter function for user inputted information about the building
 	function setInfo(floors, squarefeet, height) {
 		num_floors = floors;
 		sqft = squarefeet;
@@ -29,25 +30,16 @@ function inputData($rootScope) {
 
 	// Listen for button click being emmitted to the rootscope.  Fire the callback function once it is.
 	subscribe = function (scope, callback) {
-		console.log('subscribe was called');
 		var handler = $rootScope.$on("buttonClicked", callback);
 		// Avoid memory leaks
 		scope.$on("destroy",handler);
 	}
 
 
-	// Make a list of floor objects for the building, depending on the user input data
+	// Make a list of objects for the building containing data about each floor (base height, floor height,
+	//floor count), based on the user inputted num_floors, which is set here from the formCtrl controller.
 	// geodata.data.features[0].properties.height
 	function makeLayers() {
-		// Originally had $http.get, but don't need if height is just going to be user input
-		/*
-	    $http
-	    .get("buildings.js")
-	    .then(function(response) {
-	    	*/
-	    	//const geodata = response.data;
-			/*var total_height = geodata.data.features[0].properties.height;*/ //Total height should also be user input... 
-			// It makes most sense since to be dynamically entered since everything else is
 			var base_height = 0;
 			var floor_height = building_height / num_floors;
 			var count = 1;

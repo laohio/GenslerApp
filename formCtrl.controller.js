@@ -4,15 +4,22 @@ angular
 
 formCtrl.$inject = ["$scope", "inputData"];
 
- function formCtrl($scope,inputData) {
+ function formCtrl($scope,inputData) { 	
+ 	$scope.show = 1;
+
+ 	$scope.switchDiv = function() {
+ 		$scope.show = 2;
+ 	}
+
 	$scope.num_floors = '';
 	$scope.total_sf = '';
 	$scope.building_height = '';
 
 	$scope.makeFloorsArray = function () {
+		// A list of floors objects [{number: 1, isChecked}]
 		var floorsArray = [];
 		for (var i = 1; i <= $scope.num_floors; i++) {
-			floorsArray.push(i);
+			floorsArray.push({floor: i, isChecked:false});
 		}
 		return floorsArray;
 	}
@@ -30,5 +37,13 @@ formCtrl.$inject = ["$scope", "inputData"];
 	//Used in "updateFloors" function when click button pressed.
 	$scope.notifyMap = function () {
 		inputData.notify();
+	}
+
+	/********* SECOND PAGE OF FORM NAVIGATION*********/
+	$scope.highlightFloors = function() {
+		for (var i = 0; i < $scope.floorsArray.length; i++) {
+			if ($scope.floorsArray[i].isChecked) {
+			}
+		}
 	}
 }

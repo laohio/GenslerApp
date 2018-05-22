@@ -41,28 +41,49 @@
 
 </head>
 <body ng-app="gensApp">
-    <div id="parent-div" ng-controller="formCtrl"> <!-- Made with the intent of wrapping mapbox div within form div -->
+    <div id="parent-div" ng-controller="formCtrl">
     <div id="navigation">
         <h2>One Beacon</h2>
         <form id="mainForm" name="mainForm">
+
+        <!-- First div to appear in the navigation bar.  For entering initial building data -->
+        <div id="inputData" ng-show="show == 1">
             Building Height: <br>
             <input type="number" ng-model="building_height" placeholder="Please enter building height (meters)">
             Number of Floors: <br>
             <input type="number" ng-model="num_floors" placeholder="Enter total number of floors"><br>
             Total SF: <br>
             <input type="number" ng-model="total_sf" placeholder="Enter total SF for building">
-            <input ng-click="updateFloors()" type="submit" value="Submit" name="clickevent">
-            <ul>
-                <li ng-repeat="x in floorsArray" class="floorsList"><input type="checkbox" ng-checked="">{{x}}</li>
-            </ul>
+            <input ng-click="updateFloors(); switchDiv()" type="submit" value="Submit" name="clickevent">
+        </div>
+
+        <!-- Div #2, shows up after entering initial building data.  Adjust parameters while hodling fixed entered parameters -->
+        <div id="adjustData" ng-show="show == 2">
+            <div id="buildingInfo">
+                <ul>
+                    <li>Floors: <strong>{{num_floors}}</strong>  ||  </li>
+                    <li>Height: <strong>{{building_height}}</strong>  ||  </li>
+                    <li>SF: <strong>{{total_sf}}</strong></li>
+                </ul>
+                
+            </div>
+            <div id="floorsInfo">
+                <p>Select floors:</p>
+                <ul>
+                    <li ng-repeat="x in floorsArray" class="floorsList"><input type="checkbox" ng-model="x.isChecked" ng-change="highlightFloors()">{{x.floor}}</li>
+                </ul>
+            </div>
+        </div>
+
+            <button ng-click="show = 1">Page 1</button>
+            <button ng-click="show = 2">Page 2</button>
+
         </form>
     </div>
-
     <!-- Mapbox map container -->
     <div id="map-box-map" ng-controller="mapController"></div>
+
     </div>
-
-
 
     <!-- For toggling map layers -->
     <div id='layersMenu'></div> 

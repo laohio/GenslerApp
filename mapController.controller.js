@@ -10,7 +10,7 @@ function mapController($scope,inputData,geoData,$http) {
         container: 'map-box-map', // container id
         style: 'mapbox://styles/laohio/cjg6ymums0v4c2rqktr6258uf', // stylesheet location
         center: [-71.0608, 42.3584], // starting position [lng, lat]
-        zoom: 15.5, // starting zoom
+        zoom: 20, // starting zoom
         hash: true, // sync lat/lng with hash fragment of URL
         pitch: 60,
         bearing: 17.5
@@ -68,7 +68,6 @@ function mapController($scope,inputData,geoData,$http) {
     $scope.prepare_layers = function () {
         //Success handler if GeoJSON data successfully retrieved
         function successHandler(res) {
-            console.log('successfully retrieved data');
             $scope.source_data = res.data;
             make_layers();
         }
@@ -86,7 +85,6 @@ function mapController($scope,inputData,geoData,$http) {
         // Copy layers object, an array with "floor" object for each floor, from inputData factory
         // e.g. customLayers[0] == {floor_id:1, base_height: 0; floor_height: 20}
         // After this, make 3d extrusion on the map for each floor
-        
         function make_layers() {
             // If getFloors() returns a positive value/num_floors has already been defined, and layers have already been made,
             // then delete the existing building layers before making the new ones based on new input data.
@@ -118,7 +116,11 @@ function mapController($scope,inputData,geoData,$http) {
                 $scope.current_num_floors++;
             }
         }
-   
+    }
+
+    $scope.highlightFloor = function () {
+        // Make a particular layer update its fill-extrusion-color
+
     }
 
     // Listen for button clicked

@@ -1,6 +1,7 @@
 body {
 	margin: 0;
 	padding: 0;
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 }
 
 #map-box-map { 
@@ -53,15 +54,16 @@ body {
     background: #3074a4;
 }
 
+
 #navigation {
 	position: absolute;
 	height: 100vh; /* Span height full viewport */
 	width: 400px;
-	/*background-color: #D3D3D3;*/
     background-color: white;
-	z-index:3;
-    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+	z-index:2;
+    display: inline-block;
 }
+
 
 #navigation h2 {
 	text-align: center;
@@ -73,9 +75,10 @@ body {
 
 #navigation form {
 	padding: 0px 25px 0px 25px;
+
 }
 
-input {
+#navigation input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -120,3 +123,28 @@ button {
     border-color: black;
 }
 
+#metrics-menu {
+    position: absolute;
+    height: 100vh; /* Span height full viewport */
+    z-index:2;
+    background-color: white;
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    width: 300px;
+    display: inline-block;
+    margin-left: 400px;
+    border-style: none none none solid;
+    padding-left: 20px;
+}
+
+#metrics-menu h2 {
+    text-align: center;
+}
+
+#metrics-menu input {
+    float: right;
+    margin-right: 20px;
+}
+
+#calculations {
+    margin-top: 50px;
+}

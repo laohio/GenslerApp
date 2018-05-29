@@ -9,6 +9,8 @@ function inputData($rootScope) {
 	var sqft = '';
 	var building_height = '';
 
+	var floorsSelected = new Set();
+
 	// Setter function for user inputted information about the building
 	function setInfo(floors, squarefeet, height) {
 		num_floors = floors;
@@ -23,14 +25,38 @@ function inputData($rootScope) {
 		return sqft;
 	}
 
+	// First clear the contents of the floorsSelected Set in case some floors have been unchecked
+	function clearFloors() {
+		floorsSelected.clear();
+	}
+
+	function setFloorsSelected(floor_num) {
+		floorsSelected.add(floor_num);
+	}
+	function getFloorsSelected() {
+		return Array.from(floorsSelected);
+	}
+
 	// Emit to the rootscope that a button has been clicked
 	notify = function() {
 		$rootScope.$emit("buttonClicked");
 	}
 
+	// Emit to the rootscope that a checkbox has been checked
+	checkboxNotify = function () {
+		$rootScope.$emit("checkboxChecked");
+	}
+
 	// Listen for button click being emmitted to the rootscope.  Fire the callback function once it is.
 	subscribe = function (scope, callback) {
 		var handler = $rootScope.$on("buttonClicked", callback);
+		// Avoid memory leaks
+		scope.$on("destroy",handler);
+	}
+
+	// Same as above, for checkbox checked
+	subscribeCheckbox = function (scope, callback) {
+		var handler = $rootScope.$on("checkboxChecked", callback);
 		// Avoid memory leaks
 		scope.$on("destroy",handler);
 	}
@@ -57,12 +83,29 @@ function inputData($rootScope) {
 		  	return building;
 	}
 
+	var checkedBoxes = 0;
+
+	var setChecked = function(count) {
+		checkedBoxes = count;
+	}
+
+	getChecked = function() {
+		return checkedBoxes;
+	}
+
 	return {
 		setInfo: setInfo,
 		getFloors: getFloors,
 		getSqft: getSqft,
+		clearFloors: clearFloors,
+		setFloorsSelected: setFloorsSelected,
+		getFloorsSelected: getFloorsSelected,
 		notify: notify,
+		checkboxNotify: checkboxNotify,
 		subscribe: subscribe,
-		makeLayers: makeLayers
+		subscribeCheckbox: subscribeCheckbox,
+		makeLayers: makeLayers,
+		setChecked: setChecked,
+		getChecked: getChecked
 	}
 }

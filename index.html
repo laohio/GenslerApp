@@ -30,6 +30,9 @@
     <!-- Controller for main form -->
     <script src="formCtrl.controller.js"></script>
 
+    <!-- Controller for metrics menu -->
+    <script src="metricsCtrl.controller.js"></script>
+
     <!-- Factory managing input data -->
     <script src="inputData.factory.js"></script>
 
@@ -41,8 +44,8 @@
 
 </head>
 <body ng-app="gensApp">
-    <div id="parent-div" ng-controller="formCtrl">
-    <div id="navigation">
+    <div id="menu-parent">
+    <div id="navigation" ng-controller="formCtrl">
         <h2>One Beacon</h2>
         <form id="mainForm" name="mainForm">
 
@@ -65,7 +68,7 @@
                     <li>Height: <strong>{{building_height}}</strong>  ||  </li>
                     <li>SF: <strong>{{total_sf}}</strong></li>
                 </ul>
-                
+ 
             </div>
             <div id="floorsInfo">
                 <p>Select floors:</p>
@@ -73,17 +76,38 @@
                     <li ng-repeat="x in floorsArray" class="floorsList"><input type="checkbox" ng-model="x.isChecked" ng-change="highlightFloors()">{{x.floor}}</li>
                 </ul>
             </div>
+            <!--<p>Number of floors checked: {{(floorsArray | filter:{isChecked:true}).length}}</p>-->
+            <p>Number of floors selected: <strong>{{calculateChecked()}}</strong></p>
         </div>
 
             <button ng-click="show = 1">Page 1</button>
             <button ng-click="show = 2">Page 2</button>
 
         </form>
+    </div> <!-- End of navigation -->
+
+    <!-- Menu containing financial metrics, shows after inputting initial data -->
+    <div id="metrics-menu" ng-controller="metricsCtrl">
+        <h2>ROI Dashboard</h2>
+        <form id="metrics-form">
+            Current Rent/SF: <input type="number" ng-model="cur_rent_sf"><br>
+            Post Rent/SF: <input type="number" ng-model="post_rent_sf"><br>
+            Approx. SF/floor: <input type="number" ng-model="sqft_floor"><br>
+            Cost of renovation: <input type="number" ng-model="reno_cost"><br>
+            Other costs: <input type="number" ng-model="other_costs">
+        </form>
+
+        <div id="calculations">
+            Gross rent increase: <strong>${{rentIncrease()}}</strong><br>
+            Total costs: <strong>{{totalCosts()}}</strong><br>
+            Annual ROI: <strong>{{calcRoi()}}%</strong>
+        </div>
     </div>
+
+    </div> <!-- End of menu parent -->
+
     <!-- Mapbox map container -->
     <div id="map-box-map" ng-controller="mapController"></div>
-
-    </div>
 
     <!-- For toggling map layers -->
     <div id='layersMenu'></div> 

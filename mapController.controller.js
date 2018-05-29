@@ -10,7 +10,7 @@ function mapController($scope,inputData,geoData,$http) {
         container: 'map-box-map', // container id
         style: 'mapbox://styles/laohio/cjg6ymums0v4c2rqktr6258uf', // stylesheet location
         center: [-71.0608, 42.3584], // starting position [lng, lat]
-        zoom: 20, // starting zoom
+        zoom: 16.8, // starting zoom
         hash: true, // sync lat/lng with hash fragment of URL
         pitch: 60,
         bearing: 17.5
@@ -27,11 +27,6 @@ function mapController($scope,inputData,geoData,$http) {
                 break;
             }
         }
-
-        // In map JS, you need to add layers based on building height, which is the geojson file, and number of stories/square footage, which the user enters.
-        // Maybe you should be able to set height (but this messes with the layers)?  No, your height should be consistent with 3d extrusion (especially when
-        // other buildings are rendered)
-
 
     // Layer for all surrounding buildings
     map.addLayer({
@@ -127,6 +122,33 @@ function mapController($scope,inputData,geoData,$http) {
     inputData.subscribe($scope, function buttonWasClicked() {
         $scope.prepare_layers();
     });
+
+    var currently_highlighted = [];
+    inputData.subscribeCheckbox($scope, function checkboxWasChecked() {
+        // Save the floors which will be highlighted yellow in this variable
+        var floors_to_highlight = inputData.getFloorsSelected();
+
+        // Check for floor numbers which have been unclicked, by comparing the floors in floors_to_highlight to the last floors
+        // that were highlighted (currently_highlighted).  If a floor number is found in currently_highlighted that is no longer
+        // in the new floors_to_highlight, make it blue again.
+        for (var i = 0; i < currently_highlighted.length; i++) {
+            if (floors_to_highlight.indexOf(currently_highlighted[i]) == -1) {
+                map.setPaintProperty(currently_highlighted[i], 'fill-extrusion-color', 'blue');
+                map.setPaintProperty(currently_highlighted[i], 'fill-extrusion-opacity', 0.4);
+
+            }
+        }
+
+        // Update the color of floors in floors_to_highlight to yellow
+        for (var i = 0; i < floors_to_highlight.length; i++) {
+            map.setPaintProperty(floors_to_highlight[i], 'fill-extrusion-color', 'yellow');
+            map.setPaintProperty(floors_to_highlight[i], 'fill-extrusion-opacity', 1);
+        }
+        // Let's save the floor numbers that are currently highlighted yellow, so that we can UN-highlight them if they were
+        // unchecked
+        currently_highlighted = floors_to_highlight;
+    }); 
+
 
     
     // Toggleable layers

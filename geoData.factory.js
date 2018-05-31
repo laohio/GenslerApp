@@ -6,7 +6,7 @@ geoData.$inject = ["$http"];
 
 function geoData($http) {
     getData = function(successHandler,failureHandler) { 
-    	$http.get('http://localhost:8081/buildings.js')
+    	$http.get('/buildings.js')
 	    .then(function(response) {
 	        successHandler(response);
 	    }, function(x) {
@@ -14,4 +14,4 @@ function geoData($http) {
 	    });
 	}
 	return {getData: getData};
-}
+}x

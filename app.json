@@ -1,0 +1,6 @@
+{
+  "name": "Gensler Financial",
+  "description": "A barebones Node.js app using Express 4",
+  "repository": "https://github.com/laohio/GenslerApp",
+  "keywords": ["node", "express", "heroku"],
+}

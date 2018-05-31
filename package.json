@@ -1,7 +1,7 @@
 {
   "name": "GenslerApp",
   "version": "1.0.0",
-  "description": "temp ReadME",
+  "description": "An app that allows for dynamic 3d building extrusions with accompanying tools to calculate ROI scenarios",
   "main": "app.js",
   "dependencies": {
     "express": "^4.16.3",

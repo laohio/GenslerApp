@@ -17,6 +17,10 @@ function mapController($scope,inputData,geoData,$http) {
     });
 
     map.on('load', function() {
+        // Map has to be resized to dimensions specified in its CSS container upon loading (otherwise it'll sometimes
+        // only take up half of the screen)
+        map.resize();
+
         // Insert the layer beneath a symbol layer
         var layers = map.getStyle().layers;
 
@@ -27,8 +31,6 @@ function mapController($scope,inputData,geoData,$http) {
                 break;
             }
         }
-
-        //map.resize();
 
     // Layer for all surrounding buildings
     map.addLayer({

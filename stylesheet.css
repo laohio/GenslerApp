@@ -12,12 +12,15 @@ body {
 
 
 #map-box-map { 
-	position: absolute;
-	width: 100%;
-	top: 0;
-	bottom: 0;
+	position: absolute !important;
+    width: 100%;
+	top: 0 !important;
+    right: 0 !important;
+	bottom: 0 !important;
+    left: 0 !important;
 	z-index: 0;
 }
+
 
 
 #layersMenu {

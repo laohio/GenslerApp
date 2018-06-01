@@ -28,6 +28,8 @@ function mapController($scope,inputData,geoData,$http) {
             }
         }
 
+        //map.resize();
+
     // Layer for all surrounding buildings
     map.addLayer({
         'id': 'All-Buildings',

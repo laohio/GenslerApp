@@ -14,4 +14,4 @@ function geoData($http) {
 	    });
 	}
 	return {getData: getData};
-}x
+}

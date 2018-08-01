@@ -17,8 +17,8 @@ function mapController($scope,inputData,geoData,$http) {
     });
 
     map.on('load', function() {
-        // Map has to be resized to dimensions specified in its CSS container upon loading (otherwise it'll sometimes
-        // only take up half of the screen)
+        // Resize the map upon loading to be full screen, as specified in its CSS container.  W/o this, the map
+        // will sometimes only render to be half of the page's length.
         map.resize();
 
         // Insert the layer beneath a symbol layer

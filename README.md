@@ -1,5 +1,5 @@
-Author: Nicholas Ficeto
-Title: Gensler ROI Interactive App
+Author: Nicholas Ficeto <br>
+Title: Gensler ROI Interactive App <br>
 Apr - May 2018
 
 BACKGROUND

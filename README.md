@@ -12,6 +12,9 @@ The intended users of this app are members of the firms consulting practice to d
 
 The driving principle behind this app to bridge financial technologies with interactive visualizations, such that anyone could better quanitfy the empirical value creation of the firm's design work.
 
+Screenshot:
+<img width="1280" alt="screen shot 2018-08-03 at 1 35 33 pm" src="https://user-images.githubusercontent.com/16903793/43656909-271474e8-9722-11e8-8c63-cf95e4975d75.png">
+
 TECHNOLOGIES
 -------------
 Front End: AngularJS, Vanilla JSS, HTML/CSS <br>

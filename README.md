@@ -17,7 +17,7 @@ Screenshot:
 
 TECHNOLOGIES
 -------------
-Front End: AngularJS, Vanilla JSS, HTML/CSS <br>
+Front End: AngularJS, Vanilla JS, HTML/CSS <br>
 Back End: NodeJS
 
 I've used Heroku to deploy a proof-of-concept version of the app.
